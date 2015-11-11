@@ -170,12 +170,12 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
         description.setText("");
         description.setBounds(80, y, 100, 20);
         y += 20;
-        createLabel("Einzelschritt:", 10, y, 80, 20, panel_image);
-        y += 22;
-        createButton("<-", 10, y, 80, 20, "Step <-", panel_image);
-        createButton("->", 90, y, 80, 20, "Step ->", panel_image);
-        y += 22;
-        playCube = createButton("Play Cube", 10, y, 160, 20, "Play Cube", panel_image);
+        //createLabel("Einzelschritt:", 10, y, 80, 20, panel_image);
+        //y += 22;
+        createButton("<-", 10, y, 60, 20, "Step <-", panel_image);
+        createButton("->", 70, y, 60, 20, "Step ->", panel_image);
+        //y += 22;
+        playCube = createButton("Play", 130, y, 60, 20, "Play Cube", panel_image);
         y += 22;
         createLabel("Speed:", 10, y, 60, 20, panel_image);
         playTime = new JSlider(JSlider.HORIZONTAL, 0, 500, 1);
@@ -218,7 +218,7 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
         radioPanel.add(ld);
         radioPanel.setBackground(bgcolor);
         radioPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Linienabstände"));
-        radioPanel.setBounds(0, 520, 200, 100);
+        radioPanel.setBounds(0, 480, 200, 100);
         panel_menu.add(radioPanel);
         radioPanel.add(value);
         value.setPaintTicks(true);
@@ -255,7 +255,7 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
         debug.addActionListener(this);
         debug.setFont(new Font("Arial", Font.PLAIN, 11));
         debug.setBackground(bgcolor);
-        debug.setBounds(2, 650, 100, 20);
+        debug.setBounds(2, 580, 100, 20);
         panel_menu.add(debug);
 
         GridBagLayout gridbag = new GridBagLayout();
@@ -591,7 +591,6 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
         if (debug.getSelectedIndex() >= 6) {
             System.out.println("actionPerformed: " + e);
         }
-
         // Ebene drehen
         if (e.getActionCommand().startsWith("move")) {
             String direction = e.getActionCommand().substring(4, 5);
