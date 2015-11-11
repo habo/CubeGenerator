@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-abstract class CubeFont extends HashMap<Character, Character[]> {
+abstract public class CubeFont extends HashMap<Character, Character[]> {
     private final int dimensionX;
     private final int dimensionY;
     public CubeFont(int x, int y) {

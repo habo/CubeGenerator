@@ -192,8 +192,7 @@ public class app5x5x5 extends CubePanel {
     }
 
     protected void init() {
-        setCubeFont(new Font5x5());
-        super.init(ind, valMap, blankLine);
+        super.init(ind, valMap, blankLine,new Font5x5());
     }
 
     protected void readFile(String fileName) {

@@ -11,7 +11,7 @@ import javax.swing.filechooser.FileFilter;
 
 public class CubePanel extends JFrame implements ActionListener, MouseListener, MouseMotionListener, Runnable {
 
-    protected CubeFont cubefont = null;
+    private CubeFont cubefont = null;
     protected int baseRadius = 20;
     protected int xp = 200;
     protected int yp = 5;
@@ -55,14 +55,6 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
     protected String blankLine = null;
     protected int valMap[] = null;
     protected int ind[] = null;
-
-    public void setCubeFont(CubeFont cubefont) {
-        this.cubefont = cubefont;
-    }
-
-    public CubeFont getCubeFont() {
-        return cubefont;
-    }
 
     private Rectangle converToRectangle(String s) {
         StringTokenizer st = new StringTokenizer(s, ",");
@@ -239,6 +231,7 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
         value.addChangeListener(new ChangeListener() {
+            @Override
             public void stateChanged(ChangeEvent e) {
                 if (((JSlider) e.getSource()).getValueIsAdjusting()) {
                     if (lh.isSelected()) {
@@ -274,6 +267,7 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
         c.ipadx = getSize().width;
         c.weighty = 1.0;
         JPanel panel_content = new JPanel() {
+            @Override
             public void paint(Graphics g) {
                 super.paint(g);
                 g.setColor(getBackground());
@@ -312,14 +306,14 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
     }
 
     public void registerShortcutAll(Component[] coms) {
-        for (int i = 0; i < coms.length; i++) {
-            if (coms[i] instanceof JComponent && coms[i] != description) {
-                registerShortcut((JComponent) coms[i]);
+        for (Component com : coms) {
+            if (com instanceof JComponent && com != description) {
+                registerShortcut((JComponent) com);
             }
         }
-        for (int i = 0; i < coms.length; i++) {
-            if (coms[i] instanceof JComponent && coms[i] != description) {
-                registerShortcutAll(((JComponent) coms[i]).getComponents());
+        for (Component com : coms) {
+            if (com instanceof JComponent && com != description) {
+                registerShortcutAll(((JComponent) com).getComponents());
             }
         }
     }
@@ -327,6 +321,7 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
     public void registerShortcut(JComponent c) {
         c.getInputMap().put(KeyStroke.getKeyStroke("B"), "KeyEvent.VK_B");
         c.getActionMap().put("KeyEvent.VK_B", new AbstractAction("KeyEvent.VK_B") {
+            @Override
             public void actionPerformed(ActionEvent evt) {
                 myInstance.actionPerformed(new ActionEvent(btn_save_image, evt.getID(), "Save Image"));
             }
@@ -334,6 +329,7 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
 
         c.getInputMap().put(KeyStroke.getKeyStroke("S"), "KeyEvent.VK_S");
         c.getActionMap().put("KeyEvent.VK_S", new AbstractAction("KeyEvent.VK_S") {
+            @Override
             public void actionPerformed(ActionEvent evt) {
                 myInstance.actionPerformed(new ActionEvent(btn_save_file, evt.getID(), "Save File"));
             }
@@ -341,6 +337,7 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
 
         c.getInputMap().put(KeyStroke.getKeyStroke("L"), "KeyEvent.VK_L");
         c.getActionMap().put("KeyEvent.VK_L", new AbstractAction("KeyEvent.VK_L") {
+            @Override
             public void actionPerformed(ActionEvent evt) {
                 myInstance.actionPerformed(new ActionEvent(btn_load_file, evt.getID(), "Load File"));
             }
@@ -547,6 +544,7 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
         return -1;
     }
 
+    @Override
     public void mouseMoved(MouseEvent e) {
         if (debug.getSelectedIndex() >= 1) {
             int my = e.getY() - getInsets().top;
@@ -557,21 +555,27 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
         }
     }
 
+    @Override
     public void mouseDragged(MouseEvent e) {
     }
 
+    @Override
     public void mouseClicked(MouseEvent e) {
     }
 
+    @Override
     public void mouseEntered(MouseEvent e) {
     }
 
+    @Override
     public void mouseExited(MouseEvent e) {
     }
 
+    @Override
     public void mouseReleased(MouseEvent e) {
     }
 
+    @Override
     public void mousePressed(MouseEvent e) {
         int my = e.getY() - getInsets().top;
         LED led = handlePoints(null, new Point(e.getX(), my));
@@ -582,6 +586,7 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
         }
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         if (debug.getSelectedIndex() >= 6) {
             System.out.println("actionPerformed: " + e);
@@ -608,12 +613,12 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
             }
         }
         // Text setzen
-        if (e.getActionCommand().equals("TextByFont") && getCubeFont()!=null) {
+        if (e.getActionCommand().equals("TextByFont") && cubefont!=null) {
             int n = 0;
-            for (int i = 0; i < leds.length; i++) {
-                if (leds[i].level == 1) {
+            for (LED led : leds) {
+                if (led.level == 1) {
                     char c = (char) textcombo.getSelectedObjects()[0];
-                    leds[i].state = cubefont.getForLED(c, n);
+                    led.state = cubefont.getForLED(c, n);
                     n++;
                 }
             }
@@ -672,28 +677,28 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
                     break;
             }
 
-            for (int i = 0; i < leds.length; i++) {
-                if (leds[i].level == level) {
-                    leds[i].c_on = color;
+            for (LED led : leds) {
+                if (led.level == level) {
+                    led.c_on = color;
                 }
             }
             repaint();
         }
 
-        // wenn "ganzer Cube an" gedr�ckt wurde
+        // wenn "ganzer Cube an" gedrückt wurde
         if (e.getActionCommand().equals("Cube on")) {
-            for (int i = 0; i < leds.length; i++) {
-                if (leds[i] != null) {
-                    leds[i].state = true;
+            for (LED led : leds) {
+                if (led != null) {
+                    led.state = true;
                 }
             }
             repaint();
         }
         // wenn "ganzer Cube aus" gedrückt wurde
         if (e.getActionCommand().equals("Cube off")) {
-            for (int i = 0; i < leds.length; i++) {
-                if (leds[i] != null) {
-                    leds[i].state = false;
+            for (LED led : leds) {
+                if (led != null) {
+                    led.state = false;
                 }
             }
             repaint();
@@ -704,9 +709,9 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
             if (debug.getSelectedIndex() >= 2) {
                 System.out.println("Ebene " + level + " invertieren");
             }
-            for (int i = 0; i < leds.length; i++) {
-                if (leds[i] != null && leds[i].level == level) {
-                    leds[i].state = (leds[i].state) ? false : true;
+            for (LED led : leds) {
+                if (led != null && led.level == level) {
+                    led.state= !led.state;
                 }
             }
             repaint();
@@ -774,6 +779,7 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
         repaint();
     }
 
+    @Override
     protected void processWindowEvent(WindowEvent e) {
         super.processWindowEvent(e);
         if (e.getID() == WindowEvent.WINDOW_CLOSING) {
@@ -798,6 +804,7 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
         }
     }
 
+    @Override
     public void run() {
         try {
             int i = 0;
@@ -817,10 +824,12 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
     private void showFileDialogOpen() {
         final JFileChooser chooser = new JFileChooser("Verzeichnis wählen");
         chooser.setFileFilter(new FileFilter() {
+            @Override
             public boolean accept(File f) {
                 return f.getName().toLowerCase().endsWith(".txt") || f.isDirectory();
             }
 
+            @Override
             public String getDescription() {
                 return "Text-Files(*.txt)";
             }
@@ -844,10 +853,12 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
     private void showFileDialogSave() {
         final JFileChooser chooser = new JFileChooser("Datei abspeichern");
         chooser.setFileFilter(new FileFilter() {
+            @Override
             public boolean accept(File f) {
                 return f.getName().toLowerCase().endsWith(".txt") || f.isDirectory();
             }
 
+            @Override
             public String getDescription() {
                 return "Text-Files(*.txt)";
             }
@@ -884,14 +895,14 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
             System.out.println("# call setCube(" + index + "): " + line);
         }
         curImage.setText("" + (index + 1));
-        if (line.indexOf("'") != -1) {
+        if (line.contains("'")) {
             description.setText(line.substring(line.indexOf("'") + 1));
             line = line.substring(0, line.indexOf("'"));
         } else {
             description.setText("");
         }
         for (int i = 0; i < ind.length; i++) {
-            leds[ind[i]].state = (getValueAt(line, i, valMap) == '1') ? true : false;
+            leds[ind[i]].state = (getValueAt(line, i, valMap) == '1');
         }
         repaint();
     }
@@ -915,7 +926,7 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
             System.out.println("# call saveFile: size(step 1)=" + size);
             System.out.println("# call saveFile: Datei " + fileName + ((new File(fileName).exists()) ? " ist schon vorhanden und wird �berschrieben" : " wird neu erstellt"));
         }
-        if (data.size() == 0) {
+        if (data.isEmpty()) {
             System.err.println("Keine Daten zum Speichern da.");
             return;
         }
@@ -944,8 +955,12 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
     }
 
     protected void init(int[] ind_, int[] valMap_, String blankLine_) {
-        if (getCubeFont() != null) {
-            for (Character c : getCubeFont().getAvailableChars()) {
+        init(ind_, valMap_, blankLine_,null);
+    }
+    protected void init(int[] ind_, int[] valMap_, String blankLine_, CubeFont font) {
+        cubefont=font;
+        if (cubefont != null) {
+            for (Character c : cubefont.getAvailableChars()) {
                 textcombo.addItem(c);
             }
         }
@@ -974,7 +989,7 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
 
         // die aktuelle (letzte) Zeile
         String curLine = blankLine;
-        if (data.size() == 0) {
+        if (data.isEmpty()) {
             data.addElement(blankLine);
             curImage.setText("1");
         } else {
@@ -995,7 +1010,7 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
         }
 
         String ret = new String(tmp);
-        if (curLine.indexOf("'") != -1) {
+        if (curLine.contains("'")) {
             ret += ("'" + curLine.substring(curLine.indexOf("'")));
         }
         if (debug.getSelectedIndex() >= 2) {
@@ -1016,14 +1031,14 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
         if (debug.getSelectedIndex() >= 1) {
             System.out.println("# call saveImage: dataStr=" + dataStr);
         }
-        if (dataStr.indexOf("'") != -1) {
+        if (dataStr.contains("'")) {
             dataStr = dataStr.substring(0, dataStr.indexOf("'"));
         }
         if (description.getText().length() > 0) {
             dataStr += ("'" + description.getText());
         }
         int index = 0;
-        if (data.size() == 0) {
+        if (data.isEmpty()) {
             //description.setText(""); wird in setCube eh gemacht
             data.addElement(dataStr);
         } else {
@@ -1031,7 +1046,7 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
             data.removeElementAt(index);
             data.insertElementAt(dataStr, index);
         }
-        if (dataStr.indexOf("'") != -1) {
+        if (dataStr.contains("'")) {
             dataStr = dataStr.substring(0, dataStr.indexOf("'"));
         }
         if ((index + 1) >= data.size()) {
@@ -1056,17 +1071,17 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
             System.out.println("# call <moveUp>  in CubePanel");
         }
         for (int level = count - 1; level >= 1; level--) {
-            for (int i1 = 0; i1 < leds.length; i1++) {
-                if (leds[i1] != null && leds[i1].level == level) {
-                    int i2 = searchTail(leds[i1].level + 1, leds[i1].nr);
-                    boolean state1 = leds[i1].state;
+            for (LED led : leds) {
+                if (led != null && led.level == level) {
+                    int i2 = searchTail(led.level + 1, led.nr);
+                    boolean state1 = led.state;
                     boolean state2 = leds[i2].state;
                     if (clipping && leds[i2].level == count && state2) {
                         state1 = false;
                         state2 = false;
                     }
                     leds[i2].state = state1;
-                    leds[i1].state = state2;
+                    led.state = state2;
                 }
             }
         }
@@ -1082,17 +1097,17 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
             System.out.println("# call <moveDown> in CubePanel");
         }
         for (int level = 2; level <= count; level++) {
-            for (int i1 = 0; i1 < leds.length; i1++) {
-                if (leds[i1] != null && leds[i1].level == level) {
-                    int i2 = searchTail(leds[i1].level - 1, leds[i1].nr);
-                    boolean state1 = leds[i1].state;
+            for (LED led : leds) {
+                if (led != null && led.level == level) {
+                    int i2 = searchTail(led.level - 1, led.nr);
+                    boolean state1 = led.state;
                     boolean state2 = leds[i2].state;
-                    if (clipping && leds[i1].level - 1 == 1 && state2) {
+                    if (clipping && led.level - 1 == 1 && state2) {
                         state1 = false;
                         state2 = false;
                     }
                     leds[i2].state = state1;
-                    leds[i1].state = state2;
+                    led.state = state2;
                 }
             }
         }
@@ -1168,22 +1183,22 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
             c = this.getComponents();
         }
         JComponent ret = null;
-        for (int i = 0; i < c.length; i++) {
-            if (c[i] instanceof JButton) {
-                if (((JButton) c[i]).getActionCommand().equals(actionName)) {
-                    c[i].setEnabled(false);
+        for (Component c1 : c) {
+            if (c1 instanceof JButton) {
+                if (((JButton) c1).getActionCommand().equals(actionName)) {
+                    c1.setEnabled(false);
                     return;
                 }
             }
-            if (c[i] instanceof JComponent) {
-                hideComponent(((JComponent) c[i]).getComponents(), actionName);
+            if (c1 instanceof JComponent) {
+                hideComponent(((JComponent) c1).getComponents(), actionName);
             }
         }
     }
 
     protected void hideComponents(String s[]) {
-        for (int i = 0; i < s.length; i++) {
-            hideComponent(s[i]);
+        for (String item : s) {
+            hideComponent(item);
         }
     }
 
