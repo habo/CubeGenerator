@@ -11,6 +11,11 @@ import javax.swing.filechooser.FileFilter;
 
 public class CubePanel extends JFrame implements ActionListener, MouseListener, MouseMotionListener, Runnable {
 
+    private final Font arialplain10 = new Font("Arial", Font.PLAIN, 10);
+    private final Font arialplain11 = new Font("Arial", Font.PLAIN, 11);
+    private final Font arialplain12 = new Font("Arial", Font.PLAIN, 12);
+    private final Font couriertplain10 = new Font("Courier New", Font.PLAIN, 10);
+    private final Font couriertplain12 = new Font("Courier New", Font.PLAIN, 12);
     private CubeFont cubefont = null;
     protected int baseRadius = 20;
     protected int xp = 200;
@@ -44,8 +49,6 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
     protected static CubePanel myInstance;
     protected JPanel panel_cube;
     protected JComboBox<Character> textcombo;
-//    protected JList textin;
-//    protected JScrollPane textpane;
     protected String confFileName;
     protected Properties conf = new Properties();
     protected int version = 0;
@@ -67,7 +70,7 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
         createButton("R", 140, y, 50, 20, "->" + i, panel_cube);
         JComboBox colorList = new JComboBox(colorStrings);
         panel_cube.add(colorList);
-        colorList.setFont(new Font("Arial", Font.PLAIN, 11));
+        colorList.setFont(arialplain11);
         colorList.setBounds(190, y, 60, 20);
         colorList.addActionListener(this);
         colorList.setActionCommand("Color Ebene " + i);
@@ -124,23 +127,35 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
             }
         }
         y += 20;
-        createLabel("drehen/schieben:", 10, y, 100, 20, panel_cube);
+        createLabel("schieben:", 10, y, 100, 20, panel_cube);
         y += 20;
         createButton("Unten", 10, y, 80, 20, "moveD", panel_cube);
         createButton("Oben", 90, y, 80, 20, "moveU", panel_cube);
+        y += 20;
+        createLabel("drehen:", 10, y, 100, 20, panel_cube);
+        y += 20;
+        createLabel("Z", 10, y, 60, 20, panel_cube);
+        createButton("Links", 70, y, 80, 20, "moveZL", panel_cube);
+        createButton("Rechts", 150, y, 80, 20, "moveZR", panel_cube);
+        y += 20;
+        createLabel("Y", 10, y, 60, 20, panel_cube);
+        createButton("Links", 70, y, 80, 20, "moveYL", panel_cube);
+        createButton("Rechts", 150, y, 80, 20, "moveYR", panel_cube);
+        y += 20;
+        createLabel("X", 10, y, 60, 20, panel_cube);
+        createButton("Links", 70, y, 80, 20, "moveXL", panel_cube);
+        createButton("Rechts", 150, y, 80, 20, "moveXR", panel_cube);
+        y += 20;
         // texteingabe
+        createLabel("Font:", 10, y, 100, 20, panel_cube);
+        y += 20;
+        createButton("Text", 10, y, 80, 20, "TextByFont", panel_cube);
         textcombo = new JComboBox();
         panel_cube.add(textcombo);
-        textcombo.setFont(new Font("Arial", Font.PLAIN, 11));
+        textcombo.setFont(arialplain11);
         textcombo.setBounds(170, y, 80, 20);
         textcombo.addActionListener(this);
-        //textcombo.setActionCommand("Color Ebene " + i);
-
         // texteingabe ende
-        y += 20;
-        createButton("Rechts", 90, y, 80, 20, "moveR", panel_cube);
-        createButton("Links", 10, y, 80, 20, "moveL", panel_cube);
-        createButton("Text", 170, y, 80, 20, "TextByFont", panel_cube);
         y += 30;
         panel_cube.setBounds(1, 1, panel_width + 20, y);
 
@@ -166,7 +181,7 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
         y += 20;
         createLabel("Kommentar:", 10, y, 80, 20, panel_image);
         panel_image.add(description);
-        description.setFont(new Font("Courier New", Font.PLAIN, 12));
+        description.setFont(couriertplain12);
         description.setText("");
         description.setBounds(80, y, 100, 20);
         y += 20;
@@ -197,7 +212,7 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
 
         status = new JTextArea();
         panel_cube.add(status);
-        status.setFont(new Font("Arial", Font.PLAIN, 12));
+        status.setFont(arialplain12);
         status.setBounds(80, 14, 170, 50);
         status.setBackground(new Color(0xC8, 0xC8, 0xC8));
 
@@ -218,7 +233,7 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
         radioPanel.add(ld);
         radioPanel.setBackground(bgcolor);
         radioPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Linienabstände"));
-        radioPanel.setBounds(0, 480, 200, 100);
+        radioPanel.setBounds(0, 580, 200, 100);
         panel_menu.add(radioPanel);
         radioPanel.add(value);
         value.setPaintTicks(true);
@@ -253,9 +268,9 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
             }
         });
         debug.addActionListener(this);
-        debug.setFont(new Font("Arial", Font.PLAIN, 11));
+        debug.setFont(arialplain11);
         debug.setBackground(bgcolor);
-        debug.setBounds(2, 580, 100, 20);
+        debug.setBounds(2, 690, 100, 20);
         panel_menu.add(debug);
 
         GridBagLayout gridbag = new GridBagLayout();
@@ -273,7 +288,7 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
                 g.setColor(getBackground());
                 g.fillRect(0, 0, getSize().width, getSize().height);
                 //TimesRoman
-                g.setFont(new Font("Courier", Font.PLAIN, 10));
+                g.setFont(couriertplain10);
                 handlePoints(g, null);
             }
         };
@@ -347,7 +362,7 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
     private JLabel createLabel(String caption, int x, int y, int w, int h, Container parent) {
         JLabel label = new JLabel(caption);
         parent.add(label);
-        label.setFont(new Font("Arial", Font.PLAIN, 11));
+        label.setFont(arialplain11);
         label.setBounds(x, y, w, h);
         return label;
     }
@@ -356,7 +371,7 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
         JButton button = new JButton();
         parent.add(button);
         button.setText(caption);
-        button.setFont(new Font("Arial", Font.PLAIN, 10));
+        button.setFont(arialplain10);
         button.setBounds(x, y, w, h);
         button.addActionListener(this);
         button.setActionCommand(cmd);
@@ -592,30 +607,52 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
             System.out.println("actionPerformed: " + e);
         }
         // Ebene drehen
-        if (e.getActionCommand().startsWith("move")) {
-            String direction = e.getActionCommand().substring(4, 5);
-            if (direction.equals("R")) // Cube nach rechts
-            {
-                moveRight();
-            }
-            if (direction.equals("L")) // Cube nach links
-            {
-                moveLeft();
-            }
-            if (direction.equals("U")) // Cube nach oben
-            {
-                moveUp();
-            }
-            if (direction.equals("D")) // Cube nach unten
-            {
-                moveDown();
-            }
+        if (e.getActionCommand().endsWith("moveZR")) // Cube nach rechts
+        {
+            moveRight();
+            repaint();
         }
+        if (e.getActionCommand().endsWith("moveZL")) // Cube nach links
+        {
+            moveLeft();
+            repaint();
+        }
+        if (e.getActionCommand().endsWith("moveXR")) // Cube nach vorn
+        {
+            rotateX(true);
+            repaint();
+        }
+        if (e.getActionCommand().endsWith("moveXL")) // Cube nach hinten
+        {
+            rotateX(false);
+            repaint();
+        }
+        if (e.getActionCommand().endsWith("moveYR")) // Cube nach seitelinks
+        {
+//            rotateY(true);
+            repaint();
+        }
+        if (e.getActionCommand().endsWith("moveYL")) // Cube nach seiterechts
+        {
+//            rotateY(false);
+            repaint();
+        }
+        if (e.getActionCommand().endsWith("moveU")) // Cube nach oben
+        {
+            moveUp();
+            repaint();
+        }
+        if (e.getActionCommand().endsWith("moveD")) // Cube nach unten
+        {
+            moveDown();
+            repaint();
+        }
+
         // Text setzen
-        if (e.getActionCommand().equals("TextByFont") && cubefont!=null) {
+        if (e.getActionCommand().equals("TextByFont") && cubefont != null) {
             int n = 0;
             for (LED led : leds) {
-                if (led.level == 1) {
+                if (led.level == 5) {
                     char c = (char) textcombo.getSelectedObjects()[0];
                     led.state = cubefont.getForLED(c, n);
                     n++;
@@ -710,7 +747,7 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
             }
             for (LED led : leds) {
                 if (led != null && led.level == level) {
-                    led.state= !led.state;
+                    led.state = !led.state;
                 }
             }
             repaint();
@@ -877,8 +914,8 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
     }
 
     protected char getValueAt(String line, int index, int[] valMap) {
-        // gibt das Zeichen an der bestimmten Position "index" aus dem String "line" zur�ck
-        // abh�ngig von der Mapping-Tabelle
+        // gibt das Zeichen an der bestimmten Position "index" aus dem String "line" zurück
+        // abhängig von der Mapping-Tabelle
         //
         int lineIndex = valMap[index];
         char ret = line.charAt(lineIndex);
@@ -954,10 +991,11 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
     }
 
     protected void init(int[] ind_, int[] valMap_, String blankLine_) {
-        init(ind_, valMap_, blankLine_,null);
+        init(ind_, valMap_, blankLine_, null);
     }
+
     protected void init(int[] ind_, int[] valMap_, String blankLine_, CubeFont font) {
-        cubefont=font;
+        cubefont = font;
         if (cubefont != null) {
             for (Character c : cubefont.getAvailableChars()) {
                 textcombo.addItem(c);
@@ -967,14 +1005,19 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
         valMap = valMap_;
         blankLine = blankLine_;
 
-        leds = new LED[count * count * count];
+        leds = createLEDs();
+    }
+
+    protected LED[] createLEDs() {
+        LED[] tmp = new LED[count * count * count];
         for (int i = 0, l = 1, nr = 1; i < ind.length; i++) {
             if (nr > count * count) {
                 l++;
                 nr = 1;
             }
-            leds[ind[i]] = new LED(l, nr++, i);
+            tmp[ind[i]] = new LED(l, nr++, i);
         }
+        return tmp;
     }
 
     protected void showPrevImage() {
@@ -1199,6 +1242,40 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
         for (String item : s) {
             hideComponent(item);
         }
+    }
+
+    private boolean[] getrow(LED[] in, int n) {
+        boolean tmp[] = new boolean[count];
+        for (int i = 0; i < count; i++) {
+            tmp[i] = in[count * n + i].state;
+        }
+        return tmp;
+    }
+
+    private void setrow(LED[] out, int n, boolean[] in) {
+        for (int i = 0; i < count; i++) {
+            out[count * n + i].state = in[i];
+        }
+    }
+
+    private void transferX(LED[] rotier, int a, int b, boolean ot) {
+        setrow(rotier, ot ? a : b, getrow(leds, ot ? b : a));
+
+    }
+
+    private void rotateX(boolean otherdirection) {
+        LED rotier[] = createLEDs();
+        int n = 0;
+        for (int i = 0; i < 5; i++) {
+
+            transferX(rotier, 4 - i, n++, otherdirection);
+            transferX(rotier, 9 - i, n++, otherdirection);
+            transferX(rotier, 14 - i, n++, otherdirection);
+            transferX(rotier, 19 - i, n++, otherdirection);
+            transferX(rotier, 24 - i, n++, otherdirection);
+        }
+
+        leds = rotier;
     }
 
 }
