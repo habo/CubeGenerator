@@ -126,23 +126,20 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
                 createLayer(panel_cube, i, y += 20);
             }
         }
-        y += 20;
+        y += 30;
         createLabel("schieben:", 10, y, 100, 20, panel_cube);
-        y += 20;
-        createButton("Unten", 10, y, 80, 20, "moveD", panel_cube);
-        createButton("Oben", 90, y, 80, 20, "moveU", panel_cube);
-        y += 20;
-        createLabel("drehen:", 10, y, 100, 20, panel_cube);
-        y += 20;
-        createLabel("Z", 10, y, 60, 20, panel_cube);
+        createButton("Unten", 70, y, 80, 20, "moveD", panel_cube);
+        createButton("Oben", 150, y, 80, 20, "moveU", panel_cube);
+        y += 30;
+        createLabel("dreh Z", 10, y, 60, 20, panel_cube);
         createButton("Links", 70, y, 80, 20, "moveZL", panel_cube);
         createButton("Rechts", 150, y, 80, 20, "moveZR", panel_cube);
         y += 20;
-        createLabel("Y", 10, y, 60, 20, panel_cube);
-        createButton("Links", 70, y, 80, 20, "moveYL", panel_cube);
-        createButton("Rechts", 150, y, 80, 20, "moveYR", panel_cube);
-        y += 20;
-        createLabel("X", 10, y, 60, 20, panel_cube);
+//        createLabel(" dreh Y", 10, y, 60, 20, panel_cube);
+//        createButton("Links", 70, y, 80, 20, "moveYL", panel_cube);
+//        createButton("Rechts", 150, y, 80, 20, "moveYR", panel_cube);
+//        y += 20;
+        createLabel("dreh X", 10, y, 60, 20, panel_cube);
         createButton("Links", 70, y, 80, 20, "moveXL", panel_cube);
         createButton("Rechts", 150, y, 80, 20, "moveXR", panel_cube);
         y += 20;
@@ -233,7 +230,7 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
         radioPanel.add(ld);
         radioPanel.setBackground(bgcolor);
         radioPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Linienabstände"));
-        radioPanel.setBounds(0, 580, 200, 100);
+        radioPanel.setBounds(0, 550, 200, 100);
         panel_menu.add(radioPanel);
         radioPanel.add(value);
         value.setPaintTicks(true);
@@ -270,7 +267,7 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
         debug.addActionListener(this);
         debug.setFont(arialplain11);
         debug.setBackground(bgcolor);
-        debug.setBounds(2, 690, 100, 20);
+        debug.setBounds(2, 660, 100, 20);
         panel_menu.add(debug);
 
         GridBagLayout gridbag = new GridBagLayout();
@@ -627,16 +624,16 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
             rotateX(false);
             repaint();
         }
-        if (e.getActionCommand().endsWith("moveYR")) // Cube nach seitelinks
-        {
+//        if (e.getActionCommand().endsWith("moveYR")) // Cube nach seitelinks
+//        {
 //            rotateY(true);
-            repaint();
-        }
-        if (e.getActionCommand().endsWith("moveYL")) // Cube nach seiterechts
-        {
+//            repaint();
+//        }
+//        if (e.getActionCommand().endsWith("moveYL")) // Cube nach seiterechts
+//        {
 //            rotateY(false);
-            repaint();
-        }
+//            repaint();
+//        }
         if (e.getActionCommand().endsWith("moveU")) // Cube nach oben
         {
             moveUp();
@@ -1244,20 +1241,6 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
         }
     }
 
-    private boolean[] getrow(LED[] in, int n) {
-        boolean tmp[] = new boolean[count];
-        for (int i = 0; i < count; i++) {
-            tmp[i] = in[count * n + i].state;
-        }
-        return tmp;
-    }
-
-    private void setrow(LED[] out, int n, boolean[] in) {
-        for (int i = 0; i < count; i++) {
-            out[count * n + i].state = in[i];
-        }
-    }
-
     private void transferX(LED[] rotier, int a, int b, boolean ot) {
         setrow(rotier, ot ? a : b, getrow(leds, ot ? b : a));
 
@@ -1276,6 +1259,20 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
         }
 
         leds = rotier;
+    }
+
+    private boolean[] getrow(LED[] in, int n) {
+        boolean tmp[] = new boolean[count];
+        for (int i = 0; i < count; i++) {
+            tmp[i] = in[count * n + i].state;
+        }
+        return tmp;
+    }
+
+    private void setrow(LED[] out, int n, boolean[] in) {
+        for (int i = 0; i < count; i++) {
+            out[count * n + i].state = in[i];
+        }
     }
 
 }
