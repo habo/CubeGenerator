@@ -1253,8 +1253,12 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
         }
     }
 
-    private void transferX(LED[] rotier, int a, int b, boolean ot) {
+    private void transferRow(LED[] rotier, int a, int b, boolean ot) {
         setrow(rotier, ot ? a : b, getrow(leds, ot ? b : a));
+    }
+
+    private void transfer(LED[] rotier, int a, int b, boolean ot) {
+        rotier[ot ? a : b].state = leds[ot ? b : a].state;
 
     }
 
@@ -1262,12 +1266,11 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
         LED rotier[] = createLEDs();
         int n = 0;
         for (int i = 0; i < 5; i++) {
-
-            transferX(rotier, 4 - i, n++, otherdirection);
-            transferX(rotier, 9 - i, n++, otherdirection);
-            transferX(rotier, 14 - i, n++, otherdirection);
-            transferX(rotier, 19 - i, n++, otherdirection);
-            transferX(rotier, 24 - i, n++, otherdirection);
+            transferRow(rotier, 4 - i, n++, otherdirection);
+            transferRow(rotier, 9 - i, n++, otherdirection);
+            transferRow(rotier, 14 - i, n++, otherdirection);
+            transferRow(rotier, 19 - i, n++, otherdirection);
+            transferRow(rotier, 24 - i, n++, otherdirection);
         }
 
         leds = rotier;
@@ -1287,41 +1290,41 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
         }
     }
 
-    int n = 0;
-
     private void rotateY(boolean otherdirection) {
         LED rotier[] = createLEDs();
-        // or -> ol
+        int n = 0;
         for (int i = 0; i < count * count * count; i += 25) {
-            // ecke
-            rotier[0 + i] = leds[4 + i];
-            rotier[20 + i] = leds[0 + i];
-            rotier[24 + i] = leds[20 + i];
-            rotier[4 + i] = leds[24 + i];
-            rotier[12 + i] = leds[12 + i]; //mittelachse
-            // 1 rein
-            rotier[5 + i] = leds[3 + i];
-            rotier[21 + i] = leds[5 + i];
-            rotier[19 + i] = leds[21 + i];
-            rotier[3 + i] = leds[19 + i];
-            // 2 rein
-            rotier[10 + i] = leds[2 + i];
-            rotier[22 + i] = leds[10 + i];
-            rotier[14 + i] = leds[22 + i];
-            rotier[2 + i] = leds[14 + i];
-            // 3 rein
-            rotier[15 + i] = leds[1 + i];
-            rotier[23 + i] = leds[15 + i];
-            rotier[9 + i] = leds[23 + i];
-            rotier[1 + i] = leds[9 + i];
+            transfer(rotier, 0 + i, 4 + i, otherdirection);
+            transfer(rotier, 0 + i, 4 + i, otherdirection);
+            transfer(rotier, 1 + i, 9 + i, otherdirection);
+            transfer(rotier, 2 + i, 14 + i, otherdirection);
+            transfer(rotier, 3 + i, 19 + i, otherdirection);
+            transfer(rotier, 4 + i, 24 + i, otherdirection);
+
+            transfer(rotier, 5 + i, 3 + i, otherdirection);
+            transfer(rotier, 6 + i, 8 + i, otherdirection);
+            transfer(rotier, 7 + i, 13 + i, otherdirection);
+            transfer(rotier, 8 + i, 18 + i, otherdirection);
+            transfer(rotier, 9 + i, 23 + i, otherdirection);
+
+            transfer(rotier, 10 + i, 2 + i, otherdirection);
+            transfer(rotier, 11 + i, 7 + i, otherdirection);
+            transfer(rotier, 12 + i, 12 + i, otherdirection);
+            transfer(rotier, 13 + i, 17 + i, otherdirection);
+            transfer(rotier, 14 + i, 22 + i, otherdirection);
+
+            transfer(rotier, 15 + i, 1 + i, otherdirection);
+            transfer(rotier, 16 + i, 6 + i, otherdirection);
+            transfer(rotier, 17 + i, 11 + i, otherdirection);
+            transfer(rotier, 18 + i, 16 + i, otherdirection);
+            transfer(rotier, 19 + i, 21 + i, otherdirection);
+
+            transfer(rotier, 20 + i, 0 + i, otherdirection);
+            transfer(rotier, 21 + i, 5 + i, otherdirection);
+            transfer(rotier, 23 + i, 15 + i, otherdirection);
+            transfer(rotier, 22 + i, 10 + i, otherdirection);
+            transfer(rotier, 24 + i, 20 + i, otherdirection);
         }
-        rotier[31] = leds[33];
-        rotier[41] = leds[31];
-        rotier[43] = leds[41];
-        rotier[33] = leds[43];
-
         leds = rotier;
-
     }
-
 }
