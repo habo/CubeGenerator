@@ -135,10 +135,10 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
         createButton("Links", 70, y, 80, 20, "moveZL", panel_cube);
         createButton("Rechts", 150, y, 80, 20, "moveZR", panel_cube);
         y += 20;
-//        createLabel(" dreh Y", 10, y, 60, 20, panel_cube);
-//        createButton("Links", 70, y, 80, 20, "moveYL", panel_cube);
-//        createButton("Rechts", 150, y, 80, 20, "moveYR", panel_cube);
-//        y += 20;
+        createLabel("dreh Y", 10, y, 60, 20, panel_cube);
+        createButton("Links", 70, y, 80, 20, "moveYL", panel_cube);
+        createButton("Rechts", 150, y, 80, 20, "moveYR", panel_cube);
+        y += 20;
         createLabel("dreh X", 10, y, 60, 20, panel_cube);
         createButton("Links", 70, y, 80, 20, "moveXL", panel_cube);
         createButton("Rechts", 150, y, 80, 20, "moveXR", panel_cube);
@@ -230,7 +230,8 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
         radioPanel.add(ld);
         radioPanel.setBackground(bgcolor);
         radioPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Linienabstände"));
-        radioPanel.setBounds(0, 550, 200, 100);
+        y += 30;
+        radioPanel.setBounds(0, y, 200, 100);
         panel_menu.add(radioPanel);
         radioPanel.add(value);
         value.setPaintTicks(true);
@@ -267,7 +268,8 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
         debug.addActionListener(this);
         debug.setFont(arialplain11);
         debug.setBackground(bgcolor);
-        debug.setBounds(2, 660, 100, 20);
+        y += 110;
+        debug.setBounds(2, y, 100, 20);
         panel_menu.add(debug);
 
         GridBagLayout gridbag = new GridBagLayout();
@@ -496,9 +498,19 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
                         g.setColor(Color.YELLOW);
                         g.drawRect(x, y, ew, eh);
                     }
-                    if (debug.getSelectedIndex() >= 1) {
-                        g.setColor(Color.BLACK);
-                        g.drawString("Nr" + leds[i3].nr, x, y + 10);
+                    switch (debug.getSelectedIndex()) {
+                        case 1:
+                            g.setColor(Color.BLACK);
+                            g.drawString("#" + leds[i3].nr, x, y + 10);
+                            break;
+                        case 2:
+                            g.setColor(Color.BLUE);
+                            g.drawString("" + i, x + 1, y + 10);
+                            break;
+                        case 3:
+                            g.setColor(Color.RED);
+                            g.drawString("" + leds[i].nr, x + 1, y + 10);
+                            break;
                     }
                 } else // oder wir suchen eine bestimmte LED, dann ist/muss post gesetzt
                 {
@@ -624,16 +636,16 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
             rotateX(false);
             repaint();
         }
-//        if (e.getActionCommand().endsWith("moveYR")) // Cube nach seitelinks
-//        {
-//            rotateY(true);
-//            repaint();
-//        }
-//        if (e.getActionCommand().endsWith("moveYL")) // Cube nach seiterechts
-//        {
-//            rotateY(false);
-//            repaint();
-//        }
+        if (e.getActionCommand().endsWith("moveYR")) // Cube nach seitelinks
+        {
+            rotateY(true);
+            repaint();
+        }
+        if (e.getActionCommand().endsWith("moveYL")) // Cube nach seiterechts
+        {
+            rotateY(false);
+            repaint();
+        }
         if (e.getActionCommand().endsWith("moveU")) // Cube nach oben
         {
             moveUp();
@@ -1273,6 +1285,43 @@ public class CubePanel extends JFrame implements ActionListener, MouseListener, 
         for (int i = 0; i < count; i++) {
             out[count * n + i].state = in[i];
         }
+    }
+
+    int n = 0;
+
+    private void rotateY(boolean otherdirection) {
+        LED rotier[] = createLEDs();
+        // or -> ol
+        for (int i = 0; i < count * count * count; i += 25) {
+            // ecke
+            rotier[0 + i] = leds[4 + i];
+            rotier[20 + i] = leds[0 + i];
+            rotier[24 + i] = leds[20 + i];
+            rotier[4 + i] = leds[24 + i];
+            rotier[12 + i] = leds[12 + i]; //mittelachse
+            // 1 rein
+            rotier[5 + i] = leds[3 + i];
+            rotier[21 + i] = leds[5 + i];
+            rotier[19 + i] = leds[21 + i];
+            rotier[3 + i] = leds[19 + i];
+            // 2 rein
+            rotier[10 + i] = leds[2 + i];
+            rotier[22 + i] = leds[10 + i];
+            rotier[14 + i] = leds[22 + i];
+            rotier[2 + i] = leds[14 + i];
+            // 3 rein
+            rotier[15 + i] = leds[1 + i];
+            rotier[23 + i] = leds[15 + i];
+            rotier[9 + i] = leds[23 + i];
+            rotier[1 + i] = leds[9 + i];
+        }
+        rotier[31] = leds[33];
+        rotier[41] = leds[31];
+        rotier[43] = leds[41];
+        rotier[33] = leds[43];
+
+        leds = rotier;
+
     }
 
 }
